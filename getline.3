@@ -1,0 +1,24 @@
+.TH getline 3 "May 2025" "Version 1" "User Manual"
+.SH getline
+getline \- Standard library function, that reads an entire line from the input stream as stdin.
+
+.SH SYNOPSIS
+.B #include <stdio.h>
+.br
+.BI "ssize_t getline(char **line, size_t *n, FILE *stream);
+
+.SH DESCRIPTION
+The \fBgetline function can allocates memory to fit the line.
+
+line : if NULL, it will allocates memory.
+n : pointer, to store the buffer size.
+stream : the INPUT stream, usually stdio.
+
+.SH RETURN VALUE
+Returns -> the number of charachters " on success", or (-1) on failure or EOF.
+
+.SH AUTHOR
+Written by Abdelrahman, Abubakr, Monica.
+
+.SH ALSO CHECK
+printf(3)
