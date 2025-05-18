@@ -1,24 +1,114 @@
-.TH getline 3 "May 2025" "Version 1" "User Manual"
-.SH getline
-getline \- Standard library function, that reads an entire line from the input stream as stdin.
+.TH Various Functions "May 2025" "Version 1.0" "Custom Functions Manual"
 
-.SH SYNOPSIS
-.B #include <stdio.h>
-.br
-.BI "ssize_t getline(char **line, size_t *n, FILE *stream);
+.SH NAME
+myfunctions \- custom functions (Holberton School)
 
 .SH DESCRIPTION
-The getline function can allocates memory to fit the line.
+This manual documents four small Linux programs or scripts related to process IDs and basic shell behavior.
 
-line : if NULL, it will allocates memory.
-n : pointer, to store the buffer size.
-stream : the INPUT stream, usually stdio.
+.SH FUNCTIONS
 
-.SH RETURN VALUE
-Returns -> the number of charachters " on success", or (-1) on failure or EOF.
+.SS 1. getppid
+.B getppid
+is a C function that prints the PID (Process ID) of the parent process.
 
-.SH AUTHOR
-Written by Abdelrahman, Abubakr, Monica.
+.B Example:
+.nf
+#include <stdio.h>
+#include <unistd.h>
 
-.SH ALSO CHECK
-printf(3)
+int main(void)
+{
+    printf("Parent PID: %d\n", getppid());
+    return 0;
+}
+.fi
+
+The PID should remain the same across multiple executions in the same shell because the parent process (the shell) doesn't change.
+
+.SH NOTES
+Using
+.BR echo " $$ "
+in the shell prints the shell's PID — it should match the parent PID printed by the function.
+
+.SS 2. max_pid script
+This is a
+.B shell script
+that prints the maximum value a process ID (PID) can reach.
+
+.B Script:
+.nf
+#!/bin/bash
+cat /proc/sys/kernel/pid_max
+.fi
+
+This reads the kernel configuration for the highest allowable PID.
+
+.SS 3. print_args (without ac)
+This C function prints all command-line arguments passed to
+.B main
+without directly using the
+.B ac
+(argument count) parameter.
+
+.B Example:
+.nf
+#include <stdio.h>
+
+int main(int ac, char **av)
+{
+    for (char **p = av; *p != NULL; p++)
+        printf("%s\n", *p);
+    return 0;
+}
+.fi
+
+This works by iterating over
+.B av
+until it hits a null pointer.
+
+.SS 4. simple_shell_prompt
+This C function behaves like a very basic shell:
+- Prints a prompt
+- Waits for user input
+- Prints the input on the next line
+
+It uses
+.B getline()
+to read input and exits on
+.B EOF
+(Ctrl+D).
+
+.B Example:
+.nf
+#include <stdio.h>
+#include <stdlib.h>
+
+int main(void)
+{
+    char *line = NULL;
+    size_t len = 0;
+    ssize_t nread;
+
+    while (1)
+    {
+        printf("$ ");
+        nread = getline(&line, &len, stdin);
+        if (nread == -1)
+        {
+            printf("\n");
+            break;
+        }
+        printf("%s", line);
+    }
+
+    free(line);
+    return 0;
+}
+.fi
+
+AUTHOR
+Written by Your Abdelrahman, Abubakr, Monica.
+
+SEE ALSO
+getppid(2), bash(1), getline(3), proc(5)
